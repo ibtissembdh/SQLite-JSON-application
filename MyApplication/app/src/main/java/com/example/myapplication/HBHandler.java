@@ -36,10 +36,35 @@ public class HBHandler extends SQLiteOpenHelper {
      }
      public Student getStudent(String ID){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{ID });
+        Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{ID});
         if(cursor.getCount() == 0){ return null; }
         cursor.moveToFirst();
          return new Student(cursor.getString(0),cursor.getString(1),cursor.getString(2));
+     }
+
+    //UPDATE Student
+    public int updateStudent(String ID, String name, String familyName){
+        SQLiteDatabase db= this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{ID});
+
+        if(cursor.getCount() == 0){ return -1;
+        }else{ db.execSQL("update student set name =?, familyName =? where ID=?",new String[]{name,familyName, ID});
+                 return 1; }
+
+    }
+
+    //DELETE Student
+     public int deleteStudent(String ID, String name, String familyName)
+     {
+         SQLiteDatabase db = this.getWritableDatabase();
+         Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?", new String[]{ID});
+         if(cursor.getCount() == 0) {
+             return -1;
+         }else{
+             db.execSQL("DELETE from student where ID=? and name=? and familyName=?", new String[]{ID,name, familyName});
+             return 1;
+         }
+
      }
 
 
