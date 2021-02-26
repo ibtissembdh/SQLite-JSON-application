@@ -14,7 +14,14 @@ public class HBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE etudiant(_id INTEGER, matricule TEXT PRIMARY KEY, nom TEXT, prenom TEXT)"; db.execSQL(CREATE_TABLE);
+        String CREATE_TABLE = "CREATE TABLE student(_id INTEGER, matricule TEXT PRIMARY KEY, nom TEXT, prenom TEXT)";
+        db.execSQL(CREATE_TABLE);
+    }
+    //update
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS student");// Drop older table if existed
+        onCreate(db);// Creating tables again
     }
 
 
