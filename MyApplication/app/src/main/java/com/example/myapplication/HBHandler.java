@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -32,6 +33,13 @@ public class HBHandler extends SQLiteOpenHelper {
          values.put("familyName", s.familyName);
          db.insert("student",null,values);
          db.close();
+     }
+     public Student getStudent(String ID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{ID });
+        if(cursor.getCount() == 0){ return null; }
+        cursor.moveToFirst();
+         return new Student(cursor.getString(0),cursor.getString(1),cursor.getString(2));
      }
 
 
