@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -14,7 +15,7 @@ public class HBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_TABLE = "CREATE TABLE student(_id INTEGER, matricule TEXT PRIMARY KEY, nom TEXT, prenom TEXT)";
+        String CREATE_TABLE = "CREATE TABLE student(_id INTEGER, ID TEXT PRIMARY KEY, name TEXT, familyName TEXT)";
         db.execSQL(CREATE_TABLE);
     }
     //update
@@ -23,6 +24,17 @@ public class HBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS student");// Drop older table if existed
         onCreate(db);// Creating tables again
     }
+     public void addStudent(Student s){
+        SQLiteDatabase db = this.getWritableDatabase();
+         ContentValues values = new ContentValues();
+         values.put("ID",s.ID);
+         values.put("name", s.name);
+         values.put("familyName", s.familyName);
+         db.insert("student",null,values);
+         db.close();
+     }
+
+
 
 
 
