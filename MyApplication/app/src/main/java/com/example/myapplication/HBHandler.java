@@ -25,7 +25,8 @@ public class HBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS student");// Drop older table if existed
         onCreate(db);// Creating tables again
     }
-     public void addStudent(Student s){
+
+     public int  add(Student s){
         SQLiteDatabase db = this.getWritableDatabase();
          ContentValues values = new ContentValues();
          values.put("ID",s.ID);
@@ -33,7 +34,10 @@ public class HBHandler extends SQLiteOpenHelper {
          values.put("familyName", s.familyName);
          db.insert("student",null,values);
          db.close();
+         return 1;
      }
+
+     //search about a student
      public Student getStudent(String ID){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{ID});
@@ -43,32 +47,37 @@ public class HBHandler extends SQLiteOpenHelper {
      }
 
     //UPDATE Student
-    public int updateStudent(String ID, String name, String familyName){
+    public int update(Student s){
         SQLiteDatabase db= this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{ID});
+        Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{s.ID});
 
         if(cursor.getCount() == 0){ return -1;
-        }else{ db.execSQL("update student set name =?, familyName =? where ID=?",new String[]{name,familyName, ID});
+        }else{ db.execSQL("update student set name =?, familyName =? where ID=?",new String[]{s.name,s.familyName, s.ID});
                  return 1; }
 
     }
+    public int delete(Student s)
+    {
+        SQLiteDatabase db= this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{s.ID});
+        if(cursor.getCount()== 0){
+            return -1;
+        }else{
+            db.execSQL("DELETE from student where ID=? and name=? and familyName=?",new String[]{s.ID,s.name,s.familyName});
+            return 1;
+        }
+    }
+    public Cursor showStudents()
+    {
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT ID, name, familyName FROM student",null);
+        if(cursor.getCount() == 0){
+            return null;
+        }
+       
+        return cursor;
 
-    //DELETE Student
-     public int deleteStudent(String ID, String name, String familyName)
-     {
-         SQLiteDatabase db = this.getWritableDatabase();
-         Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?", new String[]{ID});
-         if(cursor.getCount() == 0) {
-             return -1;
-         }else{
-             db.execSQL("DELETE from student where ID=? and name=? and familyName=?", new String[]{ID,name, familyName});
-             return 1;
-         }
-
-     }
-
-
-
+    }
 
 
 
