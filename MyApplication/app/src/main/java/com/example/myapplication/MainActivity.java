@@ -34,9 +34,7 @@ public class MainActivity extends AppCompatActivity {
         value2= this.findViewById(R.id.name);
         value3= this.findViewById(R.id.familyName);
 
-        ID = value1.getText().toString();
-        name = value2.getText().toString();
-        familyName = value3.getText().toString();
+
 
         db= new HBHandler(this);
 
@@ -50,7 +48,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     private void searchStudent() {
+        ID = value1.getText().toString();
+        if(ID.isEmpty()) {
+            Toast.makeText(this,"ID field is required", Toast.LENGTH_LONG).show();
+        }else{
+            Student s = db.getStudent(ID);
+
+
+            if( s != null){
+                String studentName= s.getName();
+                String studentFamilyName=s.getFamilyName();
+                value2.setText(studentName);
+                value3.setText(studentFamilyName);
+            }else{
+                Toast.makeText(this,"student doesn't exist", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void showAll() {
@@ -59,44 +74,61 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateStudent() {
-        Student student = new Student(ID,name, familyName);
-        int result = db.update(student);
-        if(result == 1) {
-            Toast.makeText(this,"student is updated successfully", Toast.LENGTH_LONG).show();
-        }else if(result == -1){
-            Toast.makeText(this,"student doesn't exist", Toast.LENGTH_LONG).show();
+        ID = value1.getText().toString();
+        name = value2.getText().toString();
+        familyName = value3.getText().toString();
+
+        if(ID.isEmpty() || name.isEmpty() || familyName.isEmpty()){
+
+            Toast.makeText(this,"all the fields are required", Toast.LENGTH_LONG).show();
+        }else{
+            Student student = new Student(ID,name, familyName);
+            int result = db.update(student);
+            if(result == 1) {
+                Toast.makeText(this,"student is updated successfully", Toast.LENGTH_LONG).show();
+            }else if(result == -1){
+                Toast.makeText(this,"student doesn't exist", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
 
     private void addStudent() {
-        Student student = new Student(ID,name, familyName);
-        int result = db.add(student);
-        if(result == 1)
-        {
-            Toast.makeText(this,"student is added successfully", Toast.LENGTH_LONG).show();
-        }else if(ID.isEmpty() || name.isEmpty() || familyName.isEmpty()){
+        ID = value1.getText().toString();
+        name = value2.getText().toString();
+        familyName = value3.getText().toString();
+        if(ID.isEmpty() || name.isEmpty() || familyName.isEmpty()){
+
+             Toast.makeText(this,"all the fields are required", Toast.LENGTH_LONG).show();
+
+        }else{
+            Student student = new Student(ID,name, familyName);
+            int result = db.add(student);
+                if(result == 1) {
+                    Toast.makeText(this,"student is added successfully", Toast.LENGTH_LONG).show();
+                }else {
+                    Toast.makeText(this, "Check your Query", Toast.LENGTH_LONG).show();
+                }
+         }
+
+    }
+    private void deleteStudent() {
+        ID = value1.getText().toString();
+        name = value2.getText().toString();
+        familyName = value3.getText().toString();
+        if(ID.isEmpty() || name.isEmpty() || familyName.isEmpty()){
 
             Toast.makeText(this,"all the fields are required", Toast.LENGTH_LONG).show();
 
+        }else{
+            Student student = new Student(ID,name, familyName);
+            int result = db.delete(student);
+            if(result == 1) {
+                Toast.makeText(this,"student is deleted successfully", Toast.LENGTH_LONG).show();
+            }else if(result == -1){
+                Toast.makeText(this,"student doesn't exist", Toast.LENGTH_LONG).show();
+            }
         }
     }
-    private void deleteStudent() {
-        Student student = new Student(ID,name, familyName);
-        int result = db.delete(student);
-        if(result == 1) {
-            Toast.makeText(this,"student is deleted successfully", Toast.LENGTH_LONG).show();
-        }else if(result == -1){
-            Toast.makeText(this,"student doesn't exist", Toast.LENGTH_LONG).show();
-        }
-
-    }
-
-
-
-
-
-
-
 
 }

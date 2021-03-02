@@ -23,6 +23,5 @@ public class listeView extends AppCompatActivity {
         myAdapter adapter= new myAdapter(this, cursor);
         lv.setAdapter(adapter);
 
-
     }
 }

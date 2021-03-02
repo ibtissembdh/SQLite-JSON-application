@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class HBHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION= 1;
+    private static final int DATABASE_VERSION= 2;
     private static final String DATABASE_NAME="dataBase";
 
     public HBHandler(Context context) {
@@ -43,7 +43,7 @@ public class HBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{ID});
         if(cursor.getCount() == 0){ return null; }
         cursor.moveToFirst();
-         return new Student(cursor.getString(0),cursor.getString(1),cursor.getString(2));
+         return new Student(cursor.getString(1),cursor.getString(2),cursor.getString(3));
      }
 
     //UPDATE Student
@@ -51,15 +51,17 @@ public class HBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db= this.getWritableDatabase();
         Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{s.ID});
 
-        if(cursor.getCount() == 0){ return -1;
-        }else{ db.execSQL("update student set name =?, familyName =? where ID=?",new String[]{s.name,s.familyName, s.ID});
+        if(cursor.getCount() == 0){
+            return -1;
+        }else{
+                db.execSQL("update student set name =?, familyName =? where ID=?",new String[]{s.name,s.familyName, s.ID});
                  return 1; }
 
     }
     public int delete(Student s)
     {
         SQLiteDatabase db= this.getWritableDatabase();
-        Cursor cursor = db.rawQuery("SELECT* FROM student where ID=?",new String[]{s.ID});
+        Cursor cursor = db.rawQuery("SELECT * FROM student where ID=?",new String[]{s.ID});
         if(cursor.getCount()== 0){
             return -1;
         }else{
@@ -70,7 +72,7 @@ public class HBHandler extends SQLiteOpenHelper {
     public Cursor showStudents()
     {
         SQLiteDatabase db= this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT ID, name, familyName FROM student",null);
+        Cursor cursor = db.rawQuery("SELECT * FROM student",null);
         if(cursor.getCount() == 0){
             return null;
         }
